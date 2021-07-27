@@ -1,0 +1,59 @@
+<div class="cart-page">
+    <div class="p-grid">
+        <div class="p-col-8">
+            <div>
+                <p-button label="Continue Shopping" icon="pi pi-arrow-left" (onClick)="backToShop()"></p-button>
+            </div>
+            <div>
+                <h4>
+                    My Cart: {{ cartCount }} Item(s)
+                </h4>
+            </div>
+            <div class="cart-shipping p-mb-5">
+                Shipping after payment, Delivery time : 1 to 1.5 Hours
+            </div>
+            <div class="cart-item p-mb-5" *ngFor="let item of cartItemDetails">
+                <div class="p-grid">
+                    <div class="p-col-2 cart-item-image">
+                        <img [src]="item.product.image" alt="">
+                    </div>
+                    <div class="p-col-7">
+                        <div class="cart-item-name">{{item.product.name}}</div>
+                        <div class="cart-item-price">{{ item.product.price | currency:"&#8377;"}}</div>
+                        <div class="cart-item-remove">
+                            <button 
+                                pButton 
+                                pRipple 
+                                type="button" 
+                                icon="pi pi-trash" 
+                                class="p-button-rounded p-button-danger p-button-outlined" 
+                                (click)="deleteCartItem(item)"
+                            ></button>
+                        </div>
+                    </div>
+                    <div class="p-col-3">
+                        <div class="p-field p-fluid cart-item-quantity">
+                            <p-inputNumber 
+                                mode="decimal" 
+                                [showButtons]="true" 
+                                [inputId]="item.product.id" 
+                                [min]="1" 
+                                [max]="item.product.countInStock"
+                                [(ngModel)] = "item.quantity > item.product.countInStock ? item.product.countInStock : item.quantity"
+                                (onInput)="updateCartItemQuantity($event, item)"
+                            >
+                            </p-inputNumber>
+                        </div>
+                        <div class="cart-item-subtotal">
+                            Subtotal:
+                            <span class="cart-item-subtotal-value">{{ item.quantity > item.product.countInStock ? (item.product.price * item.product.countInStock | currency:"&#8377;") : (item.product.price * item.quantity | currency:"&#8377;") }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="p-col-4">
+            <order-summary></order-summary>
+        </div>
+    </div>
+</div>
